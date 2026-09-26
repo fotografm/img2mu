@@ -98,13 +98,16 @@ viewer but not another.
 
 | viewer | right edge |
 |---|---|
-| reticulum.site | straight |
+| **NomadNet browser** (terminal) | **straight** |
 | **MeshChatX 4.9.1** | **straight** |
+| reticulum.site | straight |
 | MeshChat | frayed |
 | rBrowser | frayed |
 
-The cause is how the page is put into the DOM. reticulum.site emits the whole page as **one
-`<pre>`**, newline-separated, with no per-line elements. MeshChat's `MicronParser.js` does
+**It is a browser-DOM problem exclusively.** NomadNet's own UI is urwid in a terminal, where
+the character grid is fixed by definition — no fractional advance, no per-line box, so there
+is nothing to round inconsistently. reticulum.site emits the whole page as **one `<pre>`**,
+newline-separated, with no per-line elements. MeshChat's `MicronParser.js` does
 `markup.split("\n")` and creates a `<div>` per line. Independent block boxes plus a
 fractional glyph advance — 0.6 em is 9.6 px at 16 px — means columns round differently on
 each line.

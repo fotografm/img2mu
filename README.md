@@ -11,8 +11,9 @@ logo. Every one is made only of `▀` characters carrying a foreground and a bac
 colour; there is no image data on the page at all.*
 
 *Rendered in MeshChatX, which pins its monospace cell width in CSS and so draws a straight
-right edge. These are byte-for-byte the same files that look smeared and wavy in plain
-MeshChat — see [known renderer bugs](#frayed-right-edge-and-wavy-vertical-lines).*
+right edge — as do NomadNet's own terminal browser and reticulum.site. These are
+byte-for-byte the same files that look smeared and wavy in plain MeshChat — see
+[known renderer bugs](#frayed-right-edge-and-wavy-vertical-lines).*
 
 ---
 
@@ -309,15 +310,20 @@ a colour.
 
 | viewer | right edge |
 |---|---|
-| reticulum.site | straight |
+| **NomadNet browser** (terminal) | **straight** |
 | **MeshChatX 4.9.1** | **straight** |
+| reticulum.site | straight |
 | MeshChat | frayed |
 | rBrowser | frayed |
 
-The cause is how each renderer lays out a line. reticulum.site emits the whole page as **one
-`<pre>`**, so it is a single text flow. MeshChat's `MicronParser.js` splits on newlines and
-creates a `<div>` per line; independent block boxes plus a **fractional** glyph advance —
-0.6 em is 9.6 px at 16 px — means columns round differently on every line.
+**This is a browser-DOM problem and nothing else.** NomadNet's own UI is urwid in a real
+terminal, which *is* a fixed character grid — there is no fractional advance and no per-line
+box, so fraying cannot occur. Likewise reticulum.site emits the whole page as **one `<pre>`**,
+a single text flow.
+
+The frayed viewers build the page differently. MeshChat's `MicronParser.js` splits on
+newlines and creates a `<div>` per line; independent block boxes plus a **fractional** glyph
+advance — 0.6 em is 9.6 px at 16 px — means columns round differently on every line.
 
 MeshChatX fixes it properly. It still builds per-line elements, but wraps each monospace cell
 in a span with an **explicit width**:

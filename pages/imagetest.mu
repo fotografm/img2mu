@@ -33,6 +33,15 @@ print("characters: each cell's foreground colour is the top pixel and its")
 print("background colour the bottom pixel, so one character carries two")
 print("stacked pixels. Converted with img2mu.py.`f")
 print("`F0f2━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+# Which viewer you are reading this in changes what you see. A real terminal
+# has a true fixed character grid, and MeshChatX pins its cell width in CSS,
+# so both draw a straight right edge. MeshChat and rBrowser let each cell take
+# the font's fractional glyph advance inside a per-line div, so columns round
+# differently on every row and the edge frays.
+print("`F888Straight right edge in: `f`F0f0NomadNet browser, MeshChatX, reticulum.site`f")
+print("`F888Frayed edge in: `f`Ffa0MeshChat, rBrowser`f`F888 - a renderer layout bug,")
+print("not the image. Same file, different result.`f")
+print("`F0f2━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
 blocks = sorted(glob.glob(os.path.join(IMAGE_DIR, "*.mu")))
 
