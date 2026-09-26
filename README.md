@@ -4,7 +4,15 @@
 NomadNet, MeshChat, rBrowser and web gateways will all render as an image — using nothing
 but coloured characters.
 
-<!-- SCREENSHOT -->
+![Two converted images on a NomadNet page](docs/images/imagetest-gallery.png)
+
+*`pages/imagetest.mu` rendering two blocks. Both are made only of `▀` characters with a
+foreground and background colour — there is no image data on the page at all.*
+
+*They also illustrate the two things that decide whether this works. The macaw is **cropped
+to the head**, so at 60 × 60 pixels the eye, facial patch and beak all survive. The test card
+is dense detail edge to edge, and at a similar budget it falls apart — the colour bars read,
+the fine gratings do not. **Crop beats every converter setting.***
 
 ---
 
@@ -265,17 +273,19 @@ over LoRa. The converter always reports real bytes.
 Anything wider than **78 columns** wraps on a standard 80-column terminal, and a wrapped
 half-block image is destroyed rather than merely untidy. The converter warns above that.
 
-Rough guide at default settings:
+Measured examples — the first two are the images in the screenshot above:
 
-| characters | pixels | approx. size |
-|---|---|---|
-| 40 × 20 | 40 × 40 | 4 kB |
-| 60 × 30 | 60 × 60 | 9–14 kB |
-| 80 × 40 | 80 × 80 | 15–20 kB |
-| 119 × 30 | 119 × 60 | ~20 kB |
+| source | characters | pixels | size |
+|---|---|---|---|
+| calibration target (flat colour) | 40 × 20 | 40 × 40 | 3.9 kB |
+| macaw, cropped to the head | 60 × 30 | 60 × 60 | 10.8 kB |
+| test card (dense detail) | 76 × 29 | 76 × 58 | 15.8 kB |
+| photo, 119 columns | 119 × 30 | 119 × 60 | ~20 kB |
 
-Actual size depends heavily on how much flat colour the image contains, because of the
-run-length encoding.
+Size depends heavily on how much **flat colour** the image contains, because of the
+run-length encoding — not on pixel count alone. The test card is barely larger in pixels
+than the macaw but half again as big on the wire, because almost no two adjacent cells share
+a colour.
 
 ---
 
