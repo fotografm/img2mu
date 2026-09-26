@@ -178,7 +178,13 @@ Same photo, same 60 × 60 budget:
 Viewers magnify a 60 × 60 block to roughly 880 px, about 15×, so every pixel has to earn its
 place. **Crop to the single subject before touching `--width` or `--dither`.**
 
-Low resolution suits logos and line art. Test cards and dense photographs fall apart.
+Low resolution suits logos and line art best.
+
+**Check the renderer before blaming the conversion.** A test card converted at 76 columns is
+fully legible in MeshChatX — castellations, colour bars, greyscale steps and gratings all
+readable — while the *identical file* looks like mush in plain MeshChat, whose wavering
+columns destroy exactly the fine vertical detail such an image is made of. Judge density in a
+viewer that draws a straight edge, or you will blame the converter for a layout bug.
 
 ---
 

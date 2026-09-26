@@ -4,15 +4,15 @@
 NomadNet, MeshChat, rBrowser and web gateways will all render as an image — using nothing
 but coloured characters.
 
-![Two converted images on a NomadNet page](docs/images/imagetest-gallery.png)
+![Three converted images on a NomadNet page](docs/images/imagetest-gallery.png)
 
-*`pages/imagetest.mu` rendering two blocks. Both are made only of `▀` characters with a
-foreground and background colour — there is no image data on the page at all.*
+*`pages/imagetest.mu` rendering three converted blocks — a photograph, a test card and a
+logo. Every one is made only of `▀` characters carrying a foreground and a background
+colour; there is no image data on the page at all.*
 
-*They also illustrate the two things that decide whether this works. The macaw is **cropped
-to the head**, so at 60 × 60 pixels the eye, facial patch and beak all survive. The test card
-is dense detail edge to edge, and at a similar budget it falls apart — the colour bars read,
-the fine gratings do not. **Crop beats every converter setting.***
+*Rendered in MeshChatX, which pins its monospace cell width in CSS and so draws a straight
+right edge. These are byte-for-byte the same files that look smeared and wavy in plain
+MeshChat — see [known renderer bugs](#frayed-right-edge-and-wavy-vertical-lines).*
 
 ---
 
@@ -246,10 +246,18 @@ its place. Same photo, same budget:
 
 Crop to the single subject **before** touching `--width`.
 
-### Subject matters
+### Subject matters — but check your renderer first
 
-Low resolution suits **logos and line art**. Test cards and dense photographs fall apart —
-there simply are not enough pixels.
+Low resolution obviously suits **logos and line art** best. Dense subjects need both enough
+width *and* a renderer that does not fray.
+
+The test card in the screenshot above is a good example: at 76 columns its castellations,
+colour bars, greyscale steps and gratings are all legible in MeshChatX. The identical file
+looks like mush in plain MeshChat, where the wavering columns destroy exactly the fine
+vertical detail a test card is made of.
+
+So before concluding an image is too dense to convert, view it somewhere that renders a
+straight edge. A good deal of apparent conversion failure is renderer fraying.
 
 ### `--dither` is usually wrong
 
