@@ -94,14 +94,31 @@ padding rather than image. The converter rounds up.
 **Symptom:** the right-hand edge of the image is ragged and vertical lines waver, in one
 viewer but not another.
 
-**This is a renderer bug, not the `.mu` file.** The same file is straight on reticulum.site
-and frayed in both MeshChat and rBrowser.
+**This is a renderer bug, not the `.mu` file**, and which viewers show it has changed:
+
+| viewer | right edge |
+|---|---|
+| reticulum.site | straight |
+| **MeshChatX 4.9.1** | **straight** |
+| MeshChat | frayed |
+| rBrowser | frayed |
 
 The cause is how the page is put into the DOM. reticulum.site emits the whole page as **one
 `<pre>`**, newline-separated, with no per-line elements. MeshChat's `MicronParser.js` does
 `markup.split("\n")` and creates a `<div>` per line. Independent block boxes plus a
 fractional glyph advance — 0.6 em is 9.6 px at 16 px — means columns round differently on
 each line.
+
+**MeshChatX solves it without giving up per-line elements.** It wraps each monospace cell in
+a span carrying an explicit width:
+
+```css
+.Mu-mnt { display: inline-block; width: 0.6em; text-align: center; white-space: pre; }
+```
+
+Once the cell width is stated rather than inherited from the font's fractional advance, every
+row rounds identically and the edge is straight. Worth knowing if you maintain a Micron
+renderer: the fix is one CSS rule, not a restructure.
 
 **Tested and rejected:** emitting a colour code on every cell (a `--uniform-cells` option) on
 the theory that differing span counts per row caused it. Both encodings frayed *identically*.

@@ -201,6 +201,10 @@ px_h = px_w × (h/w) × 2 × cell_aspect
 | reticulum.site | `0.5` |
 | rBrowser, ASCII mode **on** | `0.6` |
 
+> MeshChatX pins its cell width explicitly in CSS (see
+> [known renderer bugs](#frayed-right-edge-and-wavy-vertical-lines)), so it is worth running
+> the calibration page against it rather than assuming it matches MeshChat.
+
 So the default of `0.5` is right nearly everywhere. Only rBrowser's optional ASCII-mode
 toggle, which sets `line-height: 1.0`, needs changing.
 
@@ -293,16 +297,35 @@ a colour.
 
 ### Frayed right edge and wavy vertical lines
 
-**Not the `.mu` file.** The same block is straight on reticulum.site and frayed in both
-MeshChat and rBrowser.
+**Not the `.mu` file — and it depends entirely on the viewer.**
 
-reticulum.site emits the whole page as **one `<pre>`**. MeshChat's `MicronParser.js` splits
-on newlines and creates a `<div>` per line. Independent block boxes plus a fractional glyph
-advance — 0.6 em is 9.6 px at 16 px — means columns round differently on each line.
+| viewer | right edge |
+|---|---|
+| reticulum.site | straight |
+| **MeshChatX 4.9.1** | **straight** |
+| MeshChat | frayed |
+| rBrowser | frayed |
+
+The cause is how each renderer lays out a line. reticulum.site emits the whole page as **one
+`<pre>`**, so it is a single text flow. MeshChat's `MicronParser.js` splits on newlines and
+creates a `<div>` per line; independent block boxes plus a **fractional** glyph advance —
+0.6 em is 9.6 px at 16 px — means columns round differently on every line.
+
+MeshChatX fixes it properly. It still builds per-line elements, but wraps each monospace cell
+in a span with an **explicit width**:
+
+```css
+.Mu-mnt { display: inline-block; width: 0.6em; text-align: center; white-space: pre; }
+```
+
+Pinning the cell width makes the rounding deterministic and identical on every row, so the
+edge stays straight. This is the single biggest reason to prefer MeshChatX over MeshChat for
+viewing converted images.
 
 Emitting a colour code on every cell was tried, on the theory that uneven span counts caused
-it. Both encodings frayed identically, so the option was removed. Nothing the converter can
-do; this needs fixing upstream.
+the fraying. Both encodings frayed identically in the affected viewers, so the option was
+removed. There is nothing the converter can do — it is a layout problem, not an encoding
+one.
 
 ### Hairline banding between rows in MeshChat
 
